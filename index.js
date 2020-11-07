@@ -1,17 +1,32 @@
 const express = require('express');
+const path = require('path');
+const quotes = require('./Quotes');
+
 const app = express();
-const importData = require('./quotes.json');
 
-let port = process.env.PORT || 3000;
+// homepage route
+app.get('/', (req, res) => res.render('index', {
+    title: 'the Office Quote app',
+    quotes
+}));
 
-app.get('/', (req, res) => {
-    res.send('Hello world!')
-})
+// set a static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/quotes', (req, res) => {
-    res.send(importData);
-})
 
-app.listen(port, () => {
-    console.log(`Example app is listening on port ${port}`)
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello world!')
+// })
+
+// app.get('/quotes', (req, res) => {
+//     res.send(importQuotes);
+// })
+
+
+
+// members API routes
+app.use('/api/quotes', require('./routes/api/quotes'));
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () =>  console.log(`Example app is listening on port ${PORT}`));
