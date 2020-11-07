@@ -1,8 +1,10 @@
 const express = require('express');
 const path = require('path');
+const exphbs = require('express-handlebars');
 const quotes = require('./Quotes');
 
 const app = express();
+
 
 // homepage route
 app.get('/', (req, res) => res.render('index', {
@@ -10,21 +12,20 @@ app.get('/', (req, res) => res.render('index', {
     quotes
 }));
 
+
 // set a static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+// body parser middleware
 
-// app.get('/', (req, res) => {
-//     res.send('Hello world!')
-// })
+// homepage route
+// app.get('/', (req, res) => res.render('index'));
 
-// app.get('/quotes', (req, res) => {
-//     res.send(importQuotes);
-// })
+// handlebars middleware
+app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('view engine', 'handlebars');
 
-
-
-// members API routes
+// quotes API routes
 app.use('/api/quotes', require('./routes/api/quotes'));
 
 const PORT = process.env.PORT || 3000;
