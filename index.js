@@ -2,12 +2,18 @@ const express = require('express');
 const path = require('path');
 const exphbs = require('express-handlebars');
 const quotes = require('./Quotes');
+const { nextTick } = require('process');
 
 const app = express();
 
-app.use((req, res) => {
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+if (req.method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'GET');
+    return res.status(200).json({});
+}
+next();
 });
 
 
